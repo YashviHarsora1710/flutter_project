@@ -17,9 +17,6 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/logo.jpg', height: 120),
-            const SizedBox(height: 20),
-
             const Text(
               "Welcome Back!",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

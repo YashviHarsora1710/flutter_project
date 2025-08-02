@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SignUpScreen(),
+      home: LoginScreen(),
     );
   }
 }
