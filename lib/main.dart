@@ -1,3 +1,5 @@
+import 'package:document_helper_app/screens/main_navigation.dart';
+import 'package:document_helper_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:document_helper_app/screens/home_screen.dart';
 import 'package:document_helper_app/screens/login_screen.dart';
@@ -79,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: MainNavigation(),
     );
   }
 }
