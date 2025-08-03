@@ -81,7 +81,11 @@ class _MyHomePageState extends State<MyHomePage> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+<<<<<<< HEAD
       home: LoginScreen(),
+=======
+      home: MainNavigation(),
+>>>>>>> yashvi
     );
   }
 }

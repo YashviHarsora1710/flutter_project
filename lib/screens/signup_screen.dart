@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
+<<<<<<< HEAD
+=======
+import 'home_screen.dart';
+>>>>>>> yashvi
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -56,8 +60,14 @@ class SignUpScreen extends StatelessWidget {
                 text: "Sign Up",
                 onPressed: () {
                   // Placeholder for sign up action
+<<<<<<< HEAD
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Sign Up button pressed")),
+=======
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+>>>>>>> yashvi
                   );
                 },
               ),
