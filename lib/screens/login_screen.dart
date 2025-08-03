@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
-<<<<<<< HEAD
-=======
 import 'home_screen.dart';
->>>>>>> yashvi
 import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -49,14 +46,9 @@ class LoginScreen extends StatelessWidget {
               text: "Login",
               onPressed: () {
                 // Placeholder action
-<<<<<<< HEAD
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Login button pressed")),
-=======
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => HomeScreen()),
->>>>>>> yashvi
                 );
               },
             ),
@@ -64,19 +56,10 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(onPressed: () {}, child: Text("Forgot Password?")),
-<<<<<<< HEAD
-                TextButton(onPressed: () {}, child: Text("Sign Up")),
-=======
->>>>>>> yashvi
               ],
             ),
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignUpScreen()),
-                );
-              },
+              onPressed: () {},
               child: const Text("Don't have an account? Sign up"),
             ),
           ],
