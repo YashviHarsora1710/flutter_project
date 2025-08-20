@@ -32,10 +32,14 @@ dependencies:
   flutter:
     sdk: flutter
     
+    
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  provider: ^6.1.0
+  shared_preferences: ^2.2.3
+
 
   image_picker: ^1.0.4 #  Add this line
   # Document Scanner (Camera access)
@@ -45,20 +49,20 @@ dependencies:
   pdf: ^3.10.4
   path_provider: ^2.1.2
 
-  # Text Translation
-  translator: ^0.1.7
 
-  # PDF to Word (for now, show placeholder — no free plugin available)
-  # Sign document (hand-drawing support)
-  signature: ^5.3.0
 
   # Optional: File picker
-  file_picker: ^6.2.0
-  flutter_project: ^0.0.1
+  share_plus: ^10.0.0
+  open_filex: ^4.5.0
+  file_picker: ^8.0.0
+  
+  permission_handler: ^11.3.0  
+  # flutter_project: ^0.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

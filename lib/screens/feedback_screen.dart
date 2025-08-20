@@ -64,7 +64,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Feedback"), centerTitle: true),
+      appBar: AppBar(
+        title: const Text("Feedback"),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 55, 77, 75), // Changed color
+        foregroundColor: Colors.white,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -114,12 +119,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       label: const Text("Submit"),
                       onPressed: _submitFeedback,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          142,
-                          133,
-                          157,
-                        ),
+                        backgroundColor: const Color.fromARGB(255, 78, 90, 109),
                         foregroundColor: Colors.white,
                       ),
                     ),

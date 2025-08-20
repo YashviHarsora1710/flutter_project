@@ -4,6 +4,7 @@ import 'package:document_helper_app/screens/login_screen.dart';
 import 'package:document_helper_app/screens/signup_screen.dart';
 import 'package:document_helper_app/screens/main_navigation.dart';
 import 'package:document_helper_app/screens/services_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
