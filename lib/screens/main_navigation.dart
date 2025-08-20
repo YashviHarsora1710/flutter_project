@@ -16,8 +16,8 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    HomeScreen(),
+  final List<Widget> _pages = const [
+    HomeScreen(), // ✅ This already has service cards linked to ServiceDetailScreen
     ServicesScreen(),
     FeedbackScreen(),
     ProfileScreen(),
@@ -29,7 +29,7 @@ class _MainNavigationState extends State<MainNavigation> {
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedItemColor: Color(0xFF4C5C68),
+        selectedItemColor: const Color(0xFF4C5C68), // keep your theme
         unselectedItemColor: Colors.grey,
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
