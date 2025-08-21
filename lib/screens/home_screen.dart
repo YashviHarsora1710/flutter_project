@@ -178,6 +178,25 @@ class HomeScreen extends StatelessWidget {
           'Receive land record copy',
         ],
       },
+      {
+        'title': 'Non-Criminal Certificate',
+        'icon': Icons.home_work,
+        'docs': [
+          'Identity Proof (Aadhar Card / Passport / Voter ID)',
+          'Address Proof (Utility Bill / Ration Card)',
+          'Passport-size Photographs',
+          'Application Form',
+          'Affidavit (as required by authority)',
+        ],
+        'steps': [
+          'Collect required documents',
+          'Fill the application form for Non-Criminal Certificate',
+          'Get the affidavit prepared and notarized',
+          'Submit documents to the concerned government office (e.g., Taluka / Collector Office)',
+          'Police verification will be conducted',
+          'After approval, collect the Non-Criminal Certificate from the office',
+        ],
+      },
     ];
 
     /// Convert servicesData → ServiceModel list
