@@ -18,7 +18,8 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _pages = const [
     HomeScreen(), // ✅ This already has service cards linked to ServiceDetailScreen
-    ServicesScreen(),
+    ServicesPage(),
+    //ServicesScreen(),
     FeedbackScreen(),
     ProfileScreen(),
   ];
