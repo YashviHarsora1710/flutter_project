@@ -62,7 +62,7 @@ class ServicesPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PickupDropPage(),
+                  builder: (context) => PickupDropScreen(),
                 ), // 👈 new page
               );
             },
