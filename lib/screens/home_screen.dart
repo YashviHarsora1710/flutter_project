@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:document_helper_app/screens/service_details_screen.dart';
 import 'package:document_helper_app/models/service_model.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String searchQuery = "";
 
   @override
   Widget build(BuildContext context) {
@@ -208,6 +215,15 @@ class HomeScreen extends StatelessWidget {
       );
     }).toList();
 
+    /// ✅ Filtered list based on search query
+    final filteredServices = servicesData
+        .where(
+          (service) => service['title'].toLowerCase().contains(
+            searchQuery.toLowerCase(),
+          ),
+        )
+        .toList();
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
@@ -238,14 +254,39 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+
+            // ✅ Search Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search services...",
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
 
             // Services Grid
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GridView.builder(
-                  itemCount: servicesData.length,
+                  itemCount: filteredServices.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 20,
@@ -253,14 +294,16 @@ class HomeScreen extends StatelessWidget {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
-                    final service = servicesData[index]; // for icon + title
+                    final service = filteredServices[index]; // for icon + title
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => ServiceDetailScreen(
-                              service: services[index], // ✅ pass model
+                              service: services.firstWhere(
+                                (s) => s.name == service['title'],
+                              ), // ✅ find match
                             ),
                           ),
                         );
