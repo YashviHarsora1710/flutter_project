@@ -1,3 +1,4 @@
+import 'package:document_helper_app/screens/admin.dart';
 import 'package:flutter/material.dart';
 import 'package:document_helper_app/screens/splash_screen.dart';
 import 'package:document_helper_app/screens/login_screen.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainNavigation(),
+      home: const AdminPanel(),
     );
   }
 }

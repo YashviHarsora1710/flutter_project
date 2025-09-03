@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/service_model.dart';
+import 'checklist_page.dart';
 
 class ServiceDetailScreen extends StatelessWidget {
   final ServiceModel service;
@@ -11,7 +12,7 @@ class ServiceDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(service.name),
-        backgroundColor: const Color(0xFF4C5C68), // keep your color
+        backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
       ),
       body: Padding(
@@ -42,7 +43,35 @@ class ServiceDetailScreen extends StatelessWidget {
               ...service.procedureSteps.map(
                 (step) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Text("• $step", style: const TextStyle(fontSize: 16)),
+                  child: Text("• $step", style: TextStyle(fontSize: 16)),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // ✅ Add Button
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ChecklistPage(documents: service.requiredDocuments),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4C5C68),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                  ),
+                  child: const Text(
+                    "Add to Checklist",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
                 ),
               ),
             ],

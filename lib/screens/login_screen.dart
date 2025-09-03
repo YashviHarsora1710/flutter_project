@@ -11,6 +11,10 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
+    // ✅ Set your admin credentials here
+    const String adminEmail = "admin@example.com";
+    const String adminPassword = "admin123";
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -23,6 +27,8 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
+
+            // Email
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
@@ -32,6 +38,8 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Password
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -42,24 +50,51 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+
+            // Login button
             CustomButton(
               text: "Login",
               onPressed: () {
-                // Placeholder action
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
+                final email = emailController.text.trim();
+                final password = passwordController.text.trim();
+
+                if (email == adminEmail && password == adminPassword) {
+                  // ✅ Correct admin credentials → Navigate to Home
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
+                } else {
+                  // ❌ Wrong credentials → Show error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Invalid email or password!"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
             ),
+
+            const SizedBox(height: 15),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(onPressed: () {}, child: Text("Forgot Password?")),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("Forgot Password?"),
+                ),
               ],
             ),
+
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                );
+              },
               child: const Text("Don't have an account? Sign up"),
             ),
           ],
