@@ -75,7 +75,7 @@ class ServicesPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChecklistPage(),
+                  builder: (context) => ChecklistPage(documents: []),
                 ), // 👈 open checklist page
               );
             },
