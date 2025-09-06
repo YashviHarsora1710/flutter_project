@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
-import 'home_screen.dart';
 import 'signup_screen.dart';
+import 'main_navigation.dart'; // <-- use this instead of home_screen.dart
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -45,17 +45,17 @@ class LoginScreen extends StatelessWidget {
             CustomButton(
               text: "Login",
               onPressed: () {
-                // Placeholder action
+                // ✅ Go to MainNavigation instead of HomeScreen
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const MainNavigation()),
                 );
               },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(onPressed: () {}, child: Text("Forgot Password?")),
+                TextButton(onPressed: () {}, child: const Text("Forgot Password?")),
               ],
             ),
             TextButton(
