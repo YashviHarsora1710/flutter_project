@@ -1,3 +1,4 @@
+import 'package:document_helper_app/screens/main_navigation.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import 'home_screen.dart';
@@ -12,8 +13,8 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
 
     // ✅ Set your admin credentials here
-    const String adminEmail = "admin@example.com";
-    const String adminPassword = "admin123";
+    const String adminEmail = "";
+    const String adminPassword = "";
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -62,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                   // ✅ Correct admin credentials → Navigate to Home
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => MainNavigation()),
                   );
                 } else {
                   // ❌ Wrong credentials → Show error
