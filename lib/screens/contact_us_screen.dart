@@ -9,10 +9,7 @@ class ContactUsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Contact Us"),
         backgroundColor: const Color(0xFF4C5C68),
-<<<<<<< HEAD
-=======
         foregroundColor: Colors.white,
->>>>>>> himani
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -40,7 +37,6 @@ class ContactUsScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-<<<<<<< HEAD
        Center(
   child: ElevatedButton.icon(
     onPressed: () {
@@ -61,7 +57,6 @@ class ContactUsScreen extends StatelessWidget {
                 ),
               ),
             )
-=======
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
@@ -89,7 +84,6 @@ class ContactUsScreen extends StatelessWidget {
                 ),
               ),
             ),
->>>>>>> himani
           ],
         ),
       ),
