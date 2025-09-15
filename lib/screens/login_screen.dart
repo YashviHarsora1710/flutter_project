@@ -1,3 +1,4 @@
+import 'package:document_helper_app/screens/main_navigation.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import 'signup_screen.dart';
@@ -11,6 +12,10 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
+    // ✅ Set your admin credentials here
+    const String adminEmail = "";
+    const String adminPassword = "";
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -23,6 +28,8 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
+
+            // Email
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
@@ -32,6 +39,8 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Password
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -42,22 +51,61 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+
+            // Login button
             CustomButton(
               text: "Login",
               onPressed: () {
+<<<<<<< HEAD
                 // ✅ Go to MainNavigation instead of HomeScreen
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const MainNavigation()),
                 );
+=======
+                final email = emailController.text.trim();
+                final password = passwordController.text.trim();
+
+                if (email == adminEmail && password == adminPassword) {
+                  // ✅ Correct admin credentials → Navigate to Home
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainNavigation(
+                        onThemeChanged:
+                            (isDark) {}, // 👈 pass dummy or real function
+                      ),
+                    ),
+                  );
+                } else {
+                  // ❌ Wrong credentials → Show error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Invalid email or password!"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+>>>>>>> himani
               },
             ),
+
+            const SizedBox(height: 15),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+<<<<<<< HEAD
                 TextButton(onPressed: () {}, child: const Text("Forgot Password?")),
+=======
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("Forgot Password?"),
+                ),
+>>>>>>> himani
               ],
             ),
+
             TextButton(
               onPressed: () {
                 Navigator.push(
