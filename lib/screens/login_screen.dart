@@ -63,7 +63,12 @@ class LoginScreen extends StatelessWidget {
                   // ✅ Correct admin credentials → Navigate to Home
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MainNavigation()),
+                    MaterialPageRoute(
+                      builder: (context) => MainNavigation(
+                        onThemeChanged:
+                            (isDark) {}, // 👈 pass dummy or real function
+                      ),
+                    ),
                   );
                 } else {
                   // ❌ Wrong credentials → Show error
@@ -80,7 +85,7 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 15),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                   onPressed: () {},

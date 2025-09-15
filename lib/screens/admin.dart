@@ -4,6 +4,8 @@ import 'package:document_helper_app/screens/admin_profile_screen.dart';
 import 'package:document_helper_app/screens/admin_services_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'admin_pickup_screen.dart';
+
 class AdminPanel extends StatelessWidget {
   const AdminPanel({super.key});
 
@@ -64,6 +66,14 @@ class AdminPanel extends StatelessWidget {
                   subtitle: "Manage available services",
                   page: const AdminServicesScreen(),
                   gradient: [Colors.orange, Colors.deepOrangeAccent],
+                ),
+                _buildServiceCard(
+                  context,
+                  icon: Icons.local_shipping,
+                  title: "Pick Up",
+                  subtitle: "Manage pickup requests",
+                  page: const AdminPickupScreen(),
+                  gradient: [Colors.cyan, Colors.teal],
                 ),
                 _buildServiceCard(
                   context,

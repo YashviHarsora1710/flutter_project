@@ -1,4 +1,3 @@
-// save as: lib/screens/profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'contact_us_screen.dart';
@@ -6,7 +5,8 @@ import 'login_screen.dart';
 import 'edit_page.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final Function(bool) onThemeChanged; // ✅ receive callback
+  const ProfileScreen({super.key, required this.onThemeChanged});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,7 +23,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadProfile();
   }
 
-  // Load saved profile from SharedPreferences
   Future<void> _loadProfile() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -33,7 +32,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  // Save profile to SharedPreferences
   Future<void> _saveProfile(
     String newName,
     String newEmail,
@@ -45,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await prefs.setString("phone", newPhone);
   }
 
-  // Open EditPage and handle returned data
   Future<void> _openEdit() async {
     final result = await Navigator.push(
       context,
@@ -59,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final newEmail = result['email'] ?? email;
       final newPhone = result['phone'] ?? phone;
 
-      // update state and persist
       setState(() {
         name = newName;
         email = newEmail;
@@ -76,6 +72,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('Profile'),
         backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ), // ✅ visible button at top right
+            onSelected: (value) {
+              if (value == "light") {
+                widget.onThemeChanged(false);
+              } else if (value == "dark") {
+                widget.onThemeChanged(true);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: "light", child: Text("Light Mode")),
+              const PopupMenuItem(value: "dark", child: Text("Dark Mode")),
+            ],
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -87,19 +102,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundImage: AssetImage('assets/profile_pic.png'),
             ),
             const SizedBox(height: 16),
-
             Text(
               name,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
             Text(
               email,
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 8),
-
             Text(
               phone,
               style: const TextStyle(fontSize: 16, color: Colors.grey),
