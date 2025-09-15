@@ -6,16 +6,13 @@ class EditPage extends StatefulWidget {
   final String email;
   final String phone;
 
-<<<<<<< HEAD
   const EditPage({super.key, required this.name, required this.email, required this.phone});
-=======
   const EditPage({
     super.key,
     required this.name,
     required this.email,
     required this.phone,
   });
->>>>>>> himani
 
   @override
   State<EditPage> createState() => _EditPageState();
@@ -53,23 +50,18 @@ class _EditPageState extends State<EditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       appBar: AppBar(title: const Text("Edit Profile"), backgroundColor: const Color(0xFF4C5C68)),
-=======
       appBar: AppBar(
         title: const Text("Edit Profile"),
         backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
       ),
->>>>>>> himani
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-<<<<<<< HEAD
             TextField(controller: _nameController, decoration: const InputDecoration(labelText: "Name")),
             const SizedBox(height: 12),
-            TextField(controller: _emailController, decoration: const InputDecoration(labelText: "Email")),
             const SizedBox(height: 12),
             TextField(controller: _phoneController, decoration: const InputDecoration(labelText: "Phone")),
             const SizedBox(height: 20),
@@ -77,10 +69,8 @@ class _EditPageState extends State<EditPage> {
               width: double.infinity,
               child: ElevatedButton(onPressed: _onSave, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4C5C68)),
                 child: const Text("Save", style: TextStyle(color: Colors.white)),
-=======
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: "Name"),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -104,10 +94,8 @@ class _EditPageState extends State<EditPage> {
                   "Save",
                   style: TextStyle(color: Colors.white),
                 ),
->>>>>>> himani
               ),
             ),
-          ],
         ),
       ),
     );

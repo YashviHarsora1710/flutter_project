@@ -6,9 +6,7 @@ import 'login_screen.dart';
 import 'edit_page.dart';
 
 class ProfileScreen extends StatefulWidget {
-<<<<<<< HEAD
   const ProfileScreen({super.key});
-=======
   final Function(bool) onThemeChanged; // ✅ receive callback
   const ProfileScreen({super.key, required this.onThemeChanged});
 
@@ -68,7 +66,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await _saveProfile(newName, newEmail, newPhone);
     }
   }
->>>>>>> himani
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

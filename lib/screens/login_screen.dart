@@ -56,13 +56,11 @@ class LoginScreen extends StatelessWidget {
             CustomButton(
               text: "Login",
               onPressed: () {
-<<<<<<< HEAD
                 // ✅ Go to MainNavigation instead of HomeScreen
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const MainNavigation()),
                 );
-=======
                 final email = emailController.text.trim();
                 final password = passwordController.text.trim();
 
@@ -86,7 +84,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   );
                 }
->>>>>>> himani
               },
             ),
 
@@ -95,17 +92,11 @@ class LoginScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-<<<<<<< HEAD
                 TextButton(onPressed: () {}, child: const Text("Forgot Password?")),
-=======
-                TextButton(
                   onPressed: () {},
-                  child: const Text("Forgot Password?"),
                 ),
->>>>>>> himani
               ],
             ),
-
             TextButton(
               onPressed: () {
                 Navigator.push(
