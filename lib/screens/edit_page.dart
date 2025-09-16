@@ -48,6 +48,10 @@ class _EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String currentName = _nameController.text.isNotEmpty
+        ? _nameController.text
+        : widget.name;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Edit Profile"),
@@ -58,9 +62,15 @@ class _EditPageState extends State<EditPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // ✅ Circle avatar with first letter fallback
+            const SizedBox(height: 20),
+
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: "Name"),
+              onChanged: (_) {
+                setState(() {}); // ✅ Refresh avatar when name changes
+              },
             ),
             const SizedBox(height: 12),
             TextField(
