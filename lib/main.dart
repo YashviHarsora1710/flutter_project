@@ -46,10 +46,6 @@ class _MyAppState extends State<MyApp> {
       home: MainNavigation(
         onThemeChanged: toggleTheme, // pass function
       ),
-<<<<<<< HEAD
-      home: MainNavigation(),
-=======
->>>>>>> himani
     );
   }
 }

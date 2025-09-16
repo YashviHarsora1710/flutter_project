@@ -37,26 +37,6 @@ class ContactUsScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-       Center(
-  child: ElevatedButton.icon(
-    onPressed: () {
-      // Example action: open email app
-    },
-    icon: const Icon(Icons.message, color: Colors.white), // <-- icon white
-    label: const Text(
-      "Send us a Message",
-      style: TextStyle(color: Colors.white), // <-- text white
-    ),
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF4C5C68),
-      foregroundColor: Colors.white, // <-- ensures text/icon are white
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            )
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
