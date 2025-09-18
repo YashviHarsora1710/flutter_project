@@ -11,42 +11,43 @@ class AdminPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: theme.scaffoldBackgroundColor, //  Theme aware
       body: Column(
         children: [
-          // ✅ Custom Gradient Header
+          // Themed Gradient Header
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromARGB(255, 55, 77, 75),
-                  Color.fromARGB(255, 55, 77, 75),
+                  theme.colorScheme.primary,
+                  theme.colorScheme.secondary,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25),
               ),
             ),
-            child: const Align(
+            child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 "Admin Panel",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
 
-          // ✅ Service Cards List
+          //  Service Cards
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),
@@ -56,8 +57,7 @@ class AdminPanel extends StatelessWidget {
                   icon: Icons.home,
                   title: "Home",
                   subtitle: "Go to Admin Home",
-                  page: AdminHomeScreen(),
-                  gradient: [Colors.purpleAccent, Colors.deepPurple],
+                  page: const AdminHomeScreen(),
                 ),
                 _buildServiceCard(
                   context,
@@ -65,7 +65,6 @@ class AdminPanel extends StatelessWidget {
                   title: "Services",
                   subtitle: "Manage available services",
                   page: const AdminServicesScreen(),
-                  gradient: [Colors.orange, Colors.deepOrangeAccent],
                 ),
                 _buildServiceCard(
                   context,
@@ -73,7 +72,6 @@ class AdminPanel extends StatelessWidget {
                   title: "Pick Up",
                   subtitle: "Manage pickup requests",
                   page: const AdminPickupScreen(),
-                  gradient: [Colors.cyan, Colors.teal],
                 ),
                 _buildServiceCard(
                   context,
@@ -81,7 +79,6 @@ class AdminPanel extends StatelessWidget {
                   title: "Feedback",
                   subtitle: "View user feedback",
                   page: const AdminFeedbackScreen(),
-                  gradient: [Colors.green, Colors.teal],
                 ),
                 _buildServiceCard(
                   context,
@@ -89,7 +86,6 @@ class AdminPanel extends StatelessWidget {
                   title: "Profile",
                   subtitle: "Manage your profile",
                   page: const ProfileScreen(),
-                  gradient: [Colors.blueAccent, Colors.indigo],
                 ),
               ],
             ),
@@ -105,60 +101,67 @@ class AdminPanel extends StatelessWidget {
     required String title,
     required String subtitle,
     required Widget page,
-    required List<Color> gradient,
   }) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) => page));
       },
       child: Card(
         elevation: 6,
-        shadowColor: Colors.black26,
+        shadowColor: theme.shadowColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: const EdgeInsets.symmetric(vertical: 12),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // ✅ Gradient Icon Circle
+              //  Themed Icon Circle
               Container(
                 height: 55,
                 width: 55,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: LinearGradient(colors: gradient),
+                  gradient: LinearGradient(
+                    colors: [
+                      theme.colorScheme.primary,
+                      theme.colorScheme.secondary,
+                    ],
+                  ),
                 ),
-                child: Icon(icon, color: Colors.white, size: 28),
+                child: Icon(icon, color: theme.colorScheme.onPrimary, size: 28),
               ),
               const SizedBox(width: 16),
 
-              // ✅ Title & Subtitle
+              // Title & Subtitle
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.hintColor,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // ✅ Arrow
-              const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: theme.iconTheme.color,
+              ),
             ],
           ),
         ),

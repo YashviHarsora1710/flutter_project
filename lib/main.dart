@@ -1,11 +1,16 @@
+import 'package:document_helper_app/screens/admin.dart';
 import 'package:flutter/material.dart';
-import 'package:document_helper_app/screens/splash_screen.dart';
-import 'package:document_helper_app/screens/login_screen.dart';
-import 'package:document_helper_app/screens/signup_screen.dart';
-import 'package:document_helper_app/screens/main_navigation.dart';
+import 'package:provider/provider.dart';
+import 'screens/theme_notifier.dart';
+import 'screens/admin_home_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,14 +18,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
-      title: 'Digi Docs Desk',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: MainNavigation(),
+      title: 'Digi Docs Desk',
+      theme: themeProvider.themeData, // ✅ apply theme here
+      home: AdminPanel(),
     );
   }
 }

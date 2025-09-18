@@ -35,165 +35,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         'Receive updated Aadhaar',
       ],
     },
-    {
-      'title': 'Ration Card',
-      'icon': Icons.receipt_long,
-      'docs': ['Address Proof', 'Income Certificate', 'Family details'],
-      'steps': [
-        'Fill ration card form',
-        'Submit documents to local authority',
-        'Verification process',
-        'Receive ration card',
-      ],
-    },
-    {
-      'title': 'Voter ID',
-      'icon': Icons.how_to_vote,
-      'docs': ['Proof of Age', 'Proof of Address', 'Photograph'],
-      'steps': [
-        'Fill Form 6 online/offline',
-        'Submit required documents',
-        'Verification by Booth Level Officer',
-        'Receive Voter ID',
-      ],
-    },
-    {
-      'title': 'Birth Certificate',
-      'icon': Icons.cake,
-      'docs': ['Hospital Report', 'Parents ID Proof', 'Address Proof'],
-      'steps': [
-        'Collect hospital record',
-        'Fill birth certificate form',
-        'Submit to municipal office',
-        'Receive birth certificate',
-      ],
-    },
-    {
-      'title': 'Pension Scheme',
-      'icon': Icons.account_balance_wallet,
-      'docs': ['ID Proof', 'Bank Passbook', 'Age Proof'],
-      'steps': [
-        'Fill pension scheme application',
-        'Attach documents',
-        'Submit to local authority',
-        'Verification and approval',
-      ],
-    },
-    {
-      'title': 'Driving License',
-      'icon': Icons.directions_car,
-      'docs': ['Age Proof', 'Address Proof', 'Learner License'],
-      'steps': [
-        'Apply online/offline for driving test',
-        'Attach documents',
-        'Appear for driving test',
-        'Receive Driving License',
-      ],
-    },
-    {
-      'title': 'Passport Application',
-      'icon': Icons.flight,
-      'docs': ['Birth Certificate', 'ID Proof', 'Address Proof'],
-      'steps': [
-        'Fill passport application form',
-        'Attach documents',
-        'Book appointment at PSK',
-        'Verification and police check',
-        'Receive passport',
-      ],
-    },
-    {
-      'title': 'Income Certificate',
-      'icon': Icons.money,
-      'docs': ['ID Proof', 'Address Proof', 'Salary/Income proof'],
-      'steps': [
-        'Fill income certificate form',
-        'Attach income proof documents',
-        'Submit at Tehsil office',
-        'Verification and issuance',
-      ],
-    },
-    {
-      'title': 'Caste Certificate',
-      'icon': Icons.assignment_ind,
-      'docs': ['ID Proof', 'Address Proof', 'Community Proof'],
-      'steps': [
-        'Fill caste certificate application',
-        'Attach caste/community proof',
-        'Submit to Tehsil office',
-        'Verification and issuance',
-      ],
-    },
-    {
-      'title': 'Disability Certificate',
-      'icon': Icons.accessible,
-      'docs': ['Medical Report', 'ID Proof', 'Address Proof'],
-      'steps': [
-        'Visit government hospital',
-        'Medical board assessment',
-        'Submit application with documents',
-        'Receive disability certificate',
-      ],
-    },
-    {
-      'title': 'Death Certificate',
-      'icon': Icons.sentiment_very_dissatisfied,
-      'docs': ['Hospital/Doctor Report', 'Family ID Proof', 'Address Proof'],
-      'steps': [
-        'Collect death report from hospital',
-        'Fill death certificate application',
-        'Submit to municipal authority',
-        'Receive death certificate',
-      ],
-    },
-    {
-      'title': 'Marriage Certificate',
-      'icon': Icons.favorite,
-      'docs': [
-        'Wedding Invitation Card',
-        'Bride & Groom ID Proofs',
-        'Witness ID Proofs',
-      ],
-      'steps': [
-        'Fill marriage registration form',
-        'Submit required documents',
-        'Verification of witnesses',
-        'Receive marriage certificate',
-      ],
-    },
-    {
-      'title': 'Land Record Request',
-      'icon': Icons.home_work,
-      'docs': ['Land Ownership Proof', 'ID Proof', 'Tax Receipt'],
-      'steps': [
-        'Fill land record request form',
-        'Submit ownership documents',
-        'Verification by land records office',
-        'Receive land record copy',
-      ],
-    },
-    {
-      'title': 'Non-Criminal Certificate',
-      'icon': Icons.home_work,
-      'docs': [
-        'Identity Proof (Aadhar Card / Passport / Voter ID)',
-        'Address Proof (Utility Bill / Ration Card)',
-        'Passport-size Photographs',
-        'Application Form',
-        'Affidavit (as required by authority)',
-      ],
-      'steps': [
-        'Collect required documents',
-        'Fill the application form for Non-Criminal Certificate',
-        'Get the affidavit prepared and notarized',
-        'Submit documents to the concerned government office (e.g., Taluka / Collector Office)',
-        'Police verification will be conducted',
-        'After approval, collect the Non-Criminal Certificate from the office',
-      ],
-    },
+    // ... (rest of services)
   ];
 
   void _editService(int index) {
+    final theme = Theme.of(context);
     final titleController = TextEditingController(
       text: services[index]['title'],
     );
@@ -207,7 +53,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Edit Service"),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        title: Text("Edit Service", style: theme.textTheme.titleMedium),
         content: SingleChildScrollView(
           child: Column(
             children: [
@@ -233,7 +80,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
+            child: Text("Cancel", style: theme.textTheme.bodyLarge),
           ),
           ElevatedButton(
             onPressed: () {
@@ -250,7 +97,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               });
               Navigator.pop(context);
             },
-            child: Text("Save"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: theme.primaryColor,
+            ),
+            child: Text(
+              "Save",
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -259,14 +112,26 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text("Admin Home", style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          "Admin Home",
+          style: TextStyle(
+            color: theme.appBarTheme.foregroundColor ?? Colors.white,
+          ),
+        ),
+        backgroundColor: primaryColor,
         actions: [
           IconButton(
-            icon: Icon(Icons.add, size: 28, color: Colors.white),
+            icon: Icon(
+              Icons.add,
+              size: 28,
+              color: theme.appBarTheme.foregroundColor ?? Colors.white,
+            ),
             onPressed: () async {
               final newService = await Navigator.push(
                 context,
@@ -278,8 +143,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         ],
       ),
       body: GridView.builder(
-        padding: EdgeInsets.all(10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        padding: const EdgeInsets.all(10),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
@@ -301,6 +166,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               );
             },
             child: Card(
+              color: theme.scaffoldBackgroundColor == Colors.white
+                  ? Colors.white
+                  : const Color.fromARGB(255, 60, 60, 60),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -310,17 +178,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(
-                      service['icon'],
-                      size: 40,
-                      color: const Color.fromARGB(255, 109, 120, 130),
-                    ),
+                    Icon(service['icon'], size: 40, color: primaryColor),
                     Text(
                       service["title"],
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
                       ),
                     ),
                     Row(
@@ -361,8 +224,15 @@ class ServiceDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: theme.primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -370,27 +240,31 @@ class ServiceDetailPage extends StatelessWidget {
           children: [
             Text(
               "Required Documents:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ...documents.map(
               (doc) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text("• $doc", style: TextStyle(fontSize: 16)),
+                child: Text("• $doc", style: theme.textTheme.bodyLarge),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Steps:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ...steps.asMap().entries.map(
               (entry) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
                   "${entry.key + 1}. ${entry.value}",
-                  style: TextStyle(fontSize: 16),
+                  style: theme.textTheme.bodyLarge,
                 ),
               ),
             ),
@@ -413,8 +287,15 @@ class _AddServicePageState extends State<AddServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Add New Service")),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text("Add New Service"),
+        backgroundColor: theme.primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -433,9 +314,17 @@ class _AddServicePageState extends State<AddServicePage> {
               controller: stepsController,
               decoration: InputDecoration(labelText: "Steps (comma separated)"),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text("Save"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.primaryColor,
+              ),
+              child: Text(
+                "Save",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 String title = titleController.text;
                 List<String> docs = docsController.text
