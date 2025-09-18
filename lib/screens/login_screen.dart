@@ -1,6 +1,10 @@
+import 'package:document_helper_app/screens/main_navigation.dart';
+import 'package:document_helper_app/screens/request_otp.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/custom_button.dart';
-import 'home_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -10,6 +14,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+
+    // ✅ Set your admin credentials here
+    const String adminEmail = "";
+    const String adminPassword = "";
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -23,6 +31,8 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
+
+            // Email
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
@@ -32,6 +42,8 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Password
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -42,22 +54,53 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+
+            // Login button
             CustomButton(
               text: "Login",
               onPressed: () {
-                // Placeholder action
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
+                final email = emailController.text.trim();
+                final password = passwordController.text.trim();
+
+                if (email == adminEmail && password == adminPassword) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MainNavigation(onThemeChanged: (isDark) {}),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Invalid email or password!"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
             ),
+
+            const SizedBox(height: 15),
+
+            // 🔹 Forgot Password Button
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(onPressed: () {}, child: Text("Forgot Password?")),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RequestOtpPage(),
+                      ),
+                    );
+                  },
+                  child: const Text("Forgot Password?"),
+                ),
               ],
             ),
+
             TextButton(
               onPressed: () {
                 Navigator.push(

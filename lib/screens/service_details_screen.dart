@@ -13,6 +13,7 @@ class ServiceDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(service.name),
         backgroundColor: const Color(0xFF4C5C68),
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

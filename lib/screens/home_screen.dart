@@ -14,13 +14,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Elegant neutral tones
-    const Color backgroundColor = Color(0xFFF9F9F9); // soft white
-    const Color cardColor = Color(0xFFEDEDED); // very light grey
-    const Color textColor = Colors.black87;
-    const Color accentColor = Color(0xFF4C5C68); // elegant dark blue-grey
+    final theme = Theme.of(context);
 
-    /// ✅ Master list with all 14 services
+    /// ✅ Use theme colors instead of hardcoding
+    final Color backgroundColor = theme.scaffoldBackgroundColor;
+    final Color cardColor = theme.cardColor;
+    final Color textColor =
+        theme.textTheme.bodyLarge?.color ??
+        const Color.fromARGB(255, 28, 28, 28);
+    final Color accentColor = theme.brightness == Brightness.dark
+        ? const Color.fromARGB(255, 139, 164, 206) // light purple in dark mode
+        : theme.colorScheme.primary;
+
     final List<Map<String, dynamic>> servicesData = [
       {
         'title': 'Apply for PAN',
@@ -233,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
 
             // App Name
-            const Text(
+            Text(
               'Document Helper App',
               style: TextStyle(
                 fontSize: 26,
@@ -245,8 +250,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 10),
 
             // Welcome Message
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Need help with documents?\nWe’re here to make it easier — apply, track, and manage with ease.',
                 style: TextStyle(fontSize: 16, color: textColor),
@@ -264,7 +269,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintText: "Search services...",
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor:
+                      theme.inputDecorationTheme.fillColor ??
+                      (theme.brightness == Brightness.dark
+                          ? Colors.grey[800]
+                          : Colors.white),
                   contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -310,13 +319,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: cardColor,
+                          color: theme.brightness == Brightness.dark
+                              ? Colors.grey[800]
+                              : cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          boxShadow: const [
+                          boxShadow: [
                             BoxShadow(
-                              color: Colors.black12,
+                              color: theme.shadowColor.withOpacity(0.1),
                               blurRadius: 4,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                         ),
@@ -328,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               service['title'],
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: textColor,
