@@ -1,7 +1,10 @@
 import 'package:document_helper_app/screens/main_navigation.dart';
+import 'package:document_helper_app/screens/request_otp.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/custom_button.dart';
-import 'home_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -60,18 +63,14 @@ class LoginScreen extends StatelessWidget {
                 final password = passwordController.text.trim();
 
                 if (email == adminEmail && password == adminPassword) {
-                  // ✅ Correct admin credentials → Navigate to Home
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainNavigation(
-                        onThemeChanged:
-                            (isDark) {}, // 👈 pass dummy or real function
-                      ),
+                      builder: (context) =>
+                          MainNavigation(onThemeChanged: (isDark) {}),
                     ),
                   );
                 } else {
-                  // ❌ Wrong credentials → Show error
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Invalid email or password!"),
@@ -84,11 +83,19 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
+            // 🔹 Forgot Password Button
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RequestOtpPage(),
+                      ),
+                    );
+                  },
                   child: const Text("Forgot Password?"),
                 ),
               ],

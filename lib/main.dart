@@ -1,3 +1,4 @@
+import 'package:document_helper_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/main_navigation.dart';
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp> {
       home: MainNavigation(
         onThemeChanged: toggleTheme, // pass function
       ),
+      // home: LoginScreen(),
     );
   }
 }

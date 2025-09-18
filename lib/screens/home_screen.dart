@@ -19,10 +19,13 @@ class _HomeScreenState extends State<HomeScreen> {
     /// ✅ Use theme colors instead of hardcoding
     final Color backgroundColor = theme.scaffoldBackgroundColor;
     final Color cardColor = theme.cardColor;
-    final Color textColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
-    final Color accentColor = theme.colorScheme.primary;
+    final Color textColor =
+        theme.textTheme.bodyLarge?.color ??
+        const Color.fromARGB(255, 28, 28, 28);
+    final Color accentColor = theme.brightness == Brightness.dark
+        ? const Color.fromARGB(255, 139, 164, 206) // light purple in dark mode
+        : theme.colorScheme.primary;
 
-    /// ✅ Master list with all 14 services (unchanged)
     final List<Map<String, dynamic>> servicesData = [
       {
         'title': 'Apply for PAN',
@@ -316,7 +319,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: cardColor,
+                          color: theme.brightness == Brightness.dark
+                              ? Colors.grey[800]
+                              : cardColor,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
