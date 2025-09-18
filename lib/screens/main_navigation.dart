@@ -25,19 +25,27 @@ class _MainNavigationState extends State<MainNavigation> {
       const HomeScreen(),
       const ServicesPage(),
       const FeedbackScreen(),
-      ProfileScreen(onThemeChanged: widget.onThemeChanged), // ✅ pass it
+      ProfileScreen(onThemeChanged: widget.onThemeChanged),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedItemColor: const Color(0xFF4C5C68),
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
+        backgroundColor: isDark
+            ? const Color(0xFF4C5C68)
+            : Colors.white, //  background
+        selectedItemColor: isDark
+            ? Colors.white
+            : const Color(0xFF4C5C68), // ✅ selected icon/text
+        unselectedItemColor: isDark
+            ? Colors.white70
+            : Colors.grey, // ✅ contrast
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
           setState(() {

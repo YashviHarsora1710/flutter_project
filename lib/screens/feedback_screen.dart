@@ -67,7 +67,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       appBar: AppBar(
         title: const Text("Feedback"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75), // Changed color
+        backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
       ),
       body: Container(

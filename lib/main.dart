@@ -1,4 +1,6 @@
 import 'package:document_helper_app/screens/login_screen.dart';
+import 'package:document_helper_app/screens/signup_screen.dart';
+import 'package:document_helper_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/main_navigation.dart';
@@ -48,6 +50,8 @@ class _MyAppState extends State<MyApp> {
         onThemeChanged: toggleTheme, // pass function
       ),
       // home: LoginScreen(),
+      // home: SignUpScreen(),
+      // home: SplashScreen(),
     );
   }
 }

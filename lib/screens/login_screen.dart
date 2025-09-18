@@ -1,5 +1,5 @@
+import 'package:document_helper_app/screens/Forgot_Password.dart';
 import 'package:document_helper_app/screens/main_navigation.dart';
-import 'package:document_helper_app/screens/request_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
@@ -92,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const RequestOtpPage(),
+                        builder: (context) => const ForgotPassword(),
                       ),
                     );
                   },

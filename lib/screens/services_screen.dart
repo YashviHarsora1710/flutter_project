@@ -35,7 +35,7 @@ class ServicesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Our Services"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75),
+        backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
       ),
       body: ListView(

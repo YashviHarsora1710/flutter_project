@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
-import 'home_screen.dart';
+import 'login_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -59,14 +59,18 @@ class SignUpScreen extends StatelessWidget {
                   // Placeholder for sign up action
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
               ),
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Go back to login
+                  // ✅ Redirect to LoginScreen
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
                 },
                 child: const Text("Already have an account? Login"),
               ),
