@@ -1,7 +1,10 @@
 import 'package:document_helper_app/screens/main_navigation.dart';
+import 'package:document_helper_app/screens/forgot_password.dart'; // ✅ Correct import
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/custom_button.dart';
-import 'home_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -13,8 +16,8 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
 
     // ✅ Set your admin credentials here
-    const String adminEmail = "";
-    const String adminPassword = "";
+    const String adminEmail = "";     // You can fill this with your actual admin email
+    const String adminPassword = "";  // And this with your admin password
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -60,18 +63,14 @@ class LoginScreen extends StatelessWidget {
                 final password = passwordController.text.trim();
 
                 if (email == adminEmail && password == adminPassword) {
-                  // ✅ Correct admin credentials → Navigate to Home
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MainNavigation(
-                        onThemeChanged:
-                            (isDark) {}, // 👈 pass dummy or real function
-                      ),
+                      builder: (context) =>
+                          MainNavigation(onThemeChanged: (isDark) {}),
                     ),
                   );
                 } else {
-                  // ❌ Wrong credentials → Show error
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Invalid email or password!"),
@@ -84,16 +83,25 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
+            // 🔹 Forgot Password Button
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordPage(), // ✅ Updated class name
+                      ),
+                    );
+                  },
                   child: const Text("Forgot Password?"),
                 ),
               ],
             ),
 
+            // 🔹 Sign up
             TextButton(
               onPressed: () {
                 Navigator.push(

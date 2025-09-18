@@ -1,9 +1,20 @@
+import 'package:document_helper_app/screens/forgot_password.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/main_navigation.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart'; // ✅ Required for Firebase Web
+import 'screens/main_navigation.dart'; // ✅ Your actual app's main screen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ Initialize Firebase for all platforms (Web, Android, iOS)
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // ✅ Load dark mode preference
   final prefs = await SharedPreferences.getInstance();
   final isDarkMode = prefs.getBool("isDarkMode") ?? false;
 
@@ -27,6 +38,7 @@ class _MyAppState extends State<MyApp> {
     _isDarkMode = widget.isDarkMode;
   }
 
+  // ✅ Toggle dark mode and save preference
   void toggleTheme(bool darkMode) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isDarkMode", darkMode);
@@ -43,9 +55,10 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: MainNavigation(
-        onThemeChanged: toggleTheme, // pass function
-      ),
+      // home: MainNavigation(
+      //   onThemeChanged: toggleTheme,
+      // ),
+         home:ForgotPasswordPage()
     );
   }
 }
