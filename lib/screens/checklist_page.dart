@@ -50,6 +50,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
       ),
 
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF4C5C68),
         child: const Icon(Icons.check),
         onPressed: () {
           // Collect completed documents

@@ -17,7 +17,6 @@ class _AdminServicesScreenState extends State<AdminServicesScreen> {
         services.add(serviceController.text.trim());
         serviceController.clear();
       });
-      // ✅ Save to DB here if required
     }
   }
 
@@ -25,53 +24,44 @@ class _AdminServicesScreenState extends State<AdminServicesScreen> {
     setState(() {
       services.removeAt(index);
     });
-    // ✅ Update DB here if required
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(
-        255,
-        245,
-        246,
-        246,
-      ), // ✅ Set background color
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text("Admin - Services"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(
-          255,
-          55,
-          77,
-          75,
-        ), // ✅ Matching AppBar color
-        foregroundColor: Colors.white,
+        backgroundColor: theme.primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ✅ Input Box + Button
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: serviceController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Enter new service",
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       filled: true,
-                      fillColor: Colors.white, // ✅ White input background
+                      fillColor: theme.colorScheme.surface,
                     ),
+                    style: theme.textTheme.bodyLarge,
                   ),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.teal,
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
                   ),
                   onPressed: addService,
                   icon: const Icon(Icons.add),
@@ -80,50 +70,48 @@ class _AdminServicesScreenState extends State<AdminServicesScreen> {
               ],
             ),
             const SizedBox(height: 20),
-
-            const Text(
+            Text(
               "Available Services:",
-              style: TextStyle(
-                fontSize: 18,
+              style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
               ),
             ),
-            const Divider(color: Colors.white),
-
-            // ✅ Service List
+            Divider(color: theme.dividerColor),
             Expanded(
               child: services.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         "No services available",
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
+                        style: theme.textTheme.bodyMedium,
                       ),
                     )
                   : ListView.separated(
                       itemCount: services.length,
                       separatorBuilder: (context, index) =>
-                          const Divider(color: Colors.white),
+                          Divider(color: theme.dividerColor),
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          tileColor: const Color.fromARGB(255, 162, 165, 165),
+                        return Card(
+                          color: theme.cardColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          leading: const Icon(Icons.build, color: Colors.white),
-                          title: Text(
-                            services[index],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
+                          elevation: 2,
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.build,
+                              color: theme.colorScheme.primary,
                             ),
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Color.fromARGB(255, 12, 12, 12),
+                            title: Text(
+                              services[index],
+                              style: theme.textTheme.bodyLarge,
                             ),
-                            onPressed: () => removeService(index),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: theme.colorScheme.error,
+                              ),
+                              onPressed: () => removeService(index),
+                            ),
                           ),
                         );
                       },

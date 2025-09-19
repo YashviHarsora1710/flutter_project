@@ -14,21 +14,26 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Scaffold(
-      backgroundColor: Colors.teal.shade50,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text("Admin - Feedback"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75),
-        foregroundColor: Colors.white,
+        backgroundColor: primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: feedbacks.isEmpty
-            ? const Center(
+            ? Center(
                 child: Text(
                   "No feedbacks yet",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.6),
+                  ),
                 ),
               )
             : ListView.builder(
@@ -36,7 +41,9 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                 itemBuilder: (context, index) {
                   final fb = feedbacks[index];
                   return Card(
-                    color: Colors.white,
+                    color: theme.scaffoldBackgroundColor == Colors.white
+                        ? Colors.white
+                        : const Color.fromARGB(255, 60, 60, 60),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -45,22 +52,16 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(12),
                       leading: CircleAvatar(
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          152,
-                          159,
-                          159,
-                        ),
+                        backgroundColor: primaryColor,
                         child: Text(
-                          fb['user']![0], // First letter of user name
+                          fb['user']![0],
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
                       title: Text(
                         fb['user']!,
-                        style: const TextStyle(
+                        style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
                         ),
                       ),
                       subtitle: Column(
@@ -69,16 +70,15 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                           const SizedBox(height: 5),
                           Text(
                             fb['message']!,
-                            style: const TextStyle(fontSize: 14),
+                            style: theme.textTheme.bodyMedium,
                           ),
                           const SizedBox(height: 5),
                           Text(
                             "Reply: ${fb['reply']!.isEmpty ? 'No reply yet' : fb['reply']}",
-                            style: TextStyle(
-                              fontSize: 13,
+                            style: theme.textTheme.bodySmall?.copyWith(
                               color: fb['reply']!.isEmpty
-                                  ? Colors.grey
-                                  : Colors.teal.shade700,
+                                  ? theme.hintColor
+                                  : theme.colorScheme.secondary,
                             ),
                           ),
                         ],
@@ -87,7 +87,7 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.reply, color: Colors.teal),
+                            icon: Icon(Icons.reply, color: primaryColor),
                             onPressed: () {
                               showDialog(
                                 context: context,
@@ -114,7 +114,7 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                                       ),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.teal,
+                                          backgroundColor: primaryColor,
                                         ),
                                         onPressed: () {
                                           setState(() {
@@ -132,7 +132,10 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                             },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: Icon(
+                              Icons.delete,
+                              color: theme.colorScheme.error,
+                            ),
                             onPressed: () {
                               setState(() {
                                 feedbacks.removeAt(index);
