@@ -123,7 +123,10 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                                           });
                                           Navigator.pop(ctx);
                                         },
-                                        child: const Text("Send Reply"),
+                                        child: const Text(
+                                          "Send Reply",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   );

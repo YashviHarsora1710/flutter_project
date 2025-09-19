@@ -1,14 +1,18 @@
 import 'package:document_helper_app/screens/admin.dart';
-import 'package:document_helper_app/screens/login_screen.dart';
-import 'package:document_helper_app/screens/signup_screen.dart';
 import 'package:document_helper_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/main_navigation.dart';
+import 'package:provider/provider.dart';
+import 'screens/login_screen.dart';
+import 'screens/theme_notifier.dart';
+import 'widgets/common_widgets.dart' show toggleTheme;
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,10 +20,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Digi Docs Desk',
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      title: "Document Helper App",
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light,
+      home: AdminPanel(onThemeChanged: toggleTheme), // or your HomeScreen
     );
   }
 }
