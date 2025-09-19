@@ -1,30 +1,57 @@
 import 'package:document_helper_app/screens/admin.dart';
+import 'package:document_helper_app/screens/login_screen.dart';
+import 'package:document_helper_app/screens/signup_screen.dart';
+import 'package:document_helper_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'screens/theme_notifier.dart';
-import 'screens/admin_home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/main_navigation.dart';
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
-      child: const MyApp(),
-    ),
-  );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final isDarkMode = prefs.getBool("isDarkMode") ?? false;
+
+  runApp(MyApp(isDarkMode: isDarkMode));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final bool isDarkMode;
+  const MyApp({super.key, required this.isDarkMode});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late bool _isDarkMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _isDarkMode = widget.isDarkMode;
+  }
+
+  void toggleTheme(bool darkMode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isDarkMode", darkMode);
+    setState(() {
+      _isDarkMode = darkMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Digi Docs Desk',
-      theme: themeProvider.themeData, // ✅ apply theme here
-      home: AdminPanel(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      home: SplashScreen(),
+      //home: AdminPanel(onThemeChanged: toggleTheme),
+      // home: LoginScreen(),
+      // home: SignUpScreen(),
+      // home: SplashScreen(),
     );
   }
 }

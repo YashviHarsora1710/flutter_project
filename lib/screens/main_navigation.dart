@@ -1,3 +1,5 @@
+import 'package:document_helper_app/screens/signup_screen.dart';
+import 'package:document_helper_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'services_screen.dart';

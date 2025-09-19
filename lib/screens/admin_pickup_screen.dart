@@ -1,5 +1,5 @@
+import 'package:document_helper_app/screens/admin_pickup_detail.dart';
 import 'package:flutter/material.dart';
-import 'admin_pickup_detail.dart';
 
 class AdminPickupScreen extends StatefulWidget {
   const AdminPickupScreen({super.key});

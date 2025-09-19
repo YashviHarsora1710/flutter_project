@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:document_helper_app/widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,8 @@ import 'login_screen.dart';
 import 'theme_notifier.dart' show ThemeProvider;
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final Function(bool darkMode) onThemeChanged;
+  ProfileScreen({super.key, required this.onThemeChanged});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -21,10 +23,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _role = "Admin";
   String? _profileImagePath;
 
+  String firstLetter = "";
+  // late final themeProvider;
+
   @override
   void initState() {
     super.initState();
     _loadProfile();
+    firstLetter = _name.isNotEmpty ? _name[0].toUpperCase() : "?";
+    // themeProvider = Provider.of<ThemeProvider>(context);
   }
 
   Future<void> _loadProfile() async {
@@ -141,9 +148,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String firstLetter = _name.isNotEmpty ? _name[0].toUpperCase() : "?";
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
@@ -155,9 +159,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onSelected: (value) {
               //  Correct setTheme usage
               if (value == "Light") {
-                themeProvider.setTheme(false);
+                widget.onThemeChanged(false);
+                // themeProvider.setTheme(false);
               } else if (value == "Dark") {
-                themeProvider.setTheme(true);
+                widget.onThemeChanged(true);
+                // themeProvider.setTheme(true);
               }
             },
             itemBuilder: (context) => const [

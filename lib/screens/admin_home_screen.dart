@@ -191,7 +191,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         'After approval, collect the Non-Criminal Certificate from the office',
       ],
     },
-    // ... (rest of services)
   ];
 
   void _editService(int index) {

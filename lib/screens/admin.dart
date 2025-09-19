@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'admin_pickup_screen.dart';
 
 class AdminPanel extends StatelessWidget {
-  const AdminPanel({super.key});
+  final Function(bool darkMode) onThemeChanged;
+  const AdminPanel({super.key, required this.onThemeChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,7 @@ class AdminPanel extends StatelessWidget {
                   icon: Icons.person,
                   title: "Profile",
                   subtitle: "Manage your profile",
-                  page: const ProfileScreen(),
+                  page: ProfileScreen(onThemeChanged: onThemeChanged),
                 ),
               ],
             ),
