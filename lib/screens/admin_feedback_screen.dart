@@ -41,9 +41,9 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                 itemBuilder: (context, index) {
                   final fb = feedbacks[index];
                   return Card(
-                    color: theme.scaffoldBackgroundColor == Colors.white
-                        ? Colors.white
-                        : const Color.fromARGB(255, 60, 60, 60),
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.grey[850] // Dark mode card color
+                        : Colors.grey[200], // Light mode card color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -123,7 +123,10 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                                           });
                                           Navigator.pop(ctx);
                                         },
-                                        child: const Text("Send Reply"),
+                                        child: const Text(
+                                          "Send Reply",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   );

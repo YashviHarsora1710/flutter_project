@@ -1,9 +1,6 @@
+import 'package:document_helper_app/screens/Forgot_Password.dart';
 import 'package:document_helper_app/screens/main_navigation.dart';
-import 'package:document_helper_app/screens/request_otp.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:math';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/custom_button.dart';
 import 'signup_screen.dart';
 
@@ -16,8 +13,8 @@ class LoginScreen extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
 
     // ✅ Set your admin credentials here
-    const String adminEmail = "";
-    const String adminPassword = "";
+    const String adminEmail = "user@gmail.com";
+    const String adminPassword = "user123";
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -66,8 +63,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          MainNavigation(onThemeChanged: (isDark) {}),
+                      builder: (context) => const MainNavigation(),
                     ),
                   );
                 } else {
@@ -84,21 +80,16 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 15),
 
             // 🔹 Forgot Password Button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RequestOtpPage(),
-                      ),
-                    );
-                  },
-                  child: const Text("Forgot Password?"),
-                ),
-              ],
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ForgotPassword(),
+                  ),
+                );
+              },
+              child: const Text("Forgot Password?"),
             ),
 
             TextButton(

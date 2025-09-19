@@ -1,16 +1,17 @@
 import 'dart:io';
-import 'package:document_helper_app/widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'full_screenimage.dart';
 import 'login_screen.dart';
-import 'theme_notifier.dart' show ThemeProvider;
+import 'theme_notifier.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Function(bool darkMode) onThemeChanged;
-  ProfileScreen({super.key, required this.onThemeChanged});
+  const ProfileScreen({
+    super.key,
+    required Function(bool darkMode) onThemeChanged,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -24,14 +25,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? _profileImagePath;
 
   String firstLetter = "";
-  // late final themeProvider;
 
   @override
   void initState() {
     super.initState();
     _loadProfile();
     firstLetter = _name.isNotEmpty ? _name[0].toUpperCase() : "?";
-    // themeProvider = Provider.of<ThemeProvider>(context);
   }
 
   Future<void> _loadProfile() async {
@@ -65,14 +64,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
       _saveProfile();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+        SnackBar(
+          content: const Text(
             "✨ Wow! You look amazing with your new profile photo! ✨",
             style: TextStyle(fontSize: 16),
           ),
-          backgroundColor: const Color.fromARGB(255, 58, 79, 77),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -112,9 +111,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _name = nameController.text.trim();
                   _email = emailController.text.trim();
                   _phone = phoneController.text.trim();
-                  if (_profileImagePath == null || _profileImagePath!.isEmpty) {
-                    _profileImagePath = null;
-                  }
                 });
                 _saveProfile();
                 Navigator.pop(context);
@@ -133,37 +129,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
       margin: const EdgeInsets.symmetric(vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        leading: Icon(icon, color: const Color.fromARGB(255, 55, 77, 75)),
+        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
         title: Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(
-          value,
-          style: const TextStyle(fontSize: 16, color: Colors.black87),
-        ),
+        subtitle: Text(value, style: Theme.of(context).textTheme.bodyLarge),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
-        backgroundColor: const Color.fromARGB(255, 58, 79, 77),
-        foregroundColor: Colors.white,
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.brightness_6, color: Colors.white),
+            icon: const Icon(Icons.brightness_6),
             onSelected: (value) {
-              //  Correct setTheme usage
               if (value == "Light") {
-                widget.onThemeChanged(false);
-                // themeProvider.setTheme(false);
+                themeProvider.setTheme(false); // Light
               } else if (value == "Dark") {
-                widget.onThemeChanged(true);
-                // themeProvider.setTheme(true);
+                themeProvider.setTheme(true); // Dark
               }
             },
             itemBuilder: (context) => const [
@@ -171,20 +163,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               PopupMenuItem(value: "Dark", child: Text("Dark Mode")),
             ],
           ),
-          IconButton(
-            icon: const Icon(Icons.edit),
-            color: Colors.white,
-            onPressed: _editDetails,
-          ),
+          IconButton(icon: const Icon(Icons.edit), onPressed: _editDetails),
           IconButton(
             icon: const Icon(Icons.logout),
-            color: Colors.white,
             onPressed: () async {
-              // Clear saved login/session data
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.clear();
-
-              // Navigate to LoginScreen
               if (context.mounted) {
                 Navigator.pushReplacement(
                   context,
@@ -216,7 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   tag: 'profileImage',
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundColor: const Color.fromARGB(255, 58, 79, 77),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     child: ClipOval(
                       child: SizedBox(
                         width: 120,
@@ -229,11 +213,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : Center(
                                 child: Text(
                                   firstLetter,
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                               ),
                       ),
