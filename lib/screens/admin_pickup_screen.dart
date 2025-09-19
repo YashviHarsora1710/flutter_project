@@ -57,9 +57,9 @@ class _AdminPickupScreenState extends State<AdminPickupScreen> {
           final request = pickupRequests[index];
 
           return Card(
-            color: theme.scaffoldBackgroundColor == Colors.white
-                ? Colors.white
-                : const Color.fromARGB(255, 60, 60, 60),
+            color: theme.brightness == Brightness.dark
+                ? Colors.grey[850] // Dark mode card color
+                : Colors.grey[200], // Light mode card color
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -75,6 +75,9 @@ class _AdminPickupScreenState extends State<AdminPickupScreen> {
                 request["name"]!,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black87, // adaptive text
                 ),
               ),
               trailing: IconButton(

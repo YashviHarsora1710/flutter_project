@@ -25,9 +25,9 @@ class PickupDetailScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
-          color: theme.scaffoldBackgroundColor == Colors.white
-              ? Colors.white
-              : const Color.fromARGB(255, 60, 60, 60),
+          color: theme.brightness == Brightness.dark
+              ? Colors.grey[850] // Dark mode card color
+              : Colors.grey[200], // Light mode card color
           elevation: 3,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),

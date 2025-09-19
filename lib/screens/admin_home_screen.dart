@@ -321,9 +321,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               );
             },
             child: Card(
-              color: theme.scaffoldBackgroundColor == Colors.white
-                  ? Colors.white
-                  : const Color.fromARGB(255, 60, 60, 60),
+              color: theme.brightness == Brightness.light
+                  ? const Color.fromARGB(255, 243, 240, 240) // Light mode color
+                  : const Color.fromARGB(255, 60, 60, 60), // Dark mode color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
