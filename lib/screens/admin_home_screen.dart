@@ -194,6 +194,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   ];
 
   void _editService(int index) {
+    final theme = Theme.of(context);
     final titleController = TextEditingController(
       text: services[index]['title'],
     );
@@ -207,7 +208,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Edit Service"),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        title: Text("Edit Service", style: theme.textTheme.titleMedium),
         content: SingleChildScrollView(
           child: Column(
             children: [
@@ -233,7 +235,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
+            child: Text("Cancel", style: theme.textTheme.bodyLarge),
           ),
           ElevatedButton(
             onPressed: () {
@@ -250,7 +252,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               });
               Navigator.pop(context);
             },
-            child: Text("Save"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: theme.primaryColor,
+            ),
+            child: Text(
+              "Save",
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -259,14 +267,26 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text("Admin Home", style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          "Admin Home",
+          style: TextStyle(
+            color: theme.appBarTheme.foregroundColor ?? Colors.white,
+          ),
+        ),
+        backgroundColor: primaryColor,
         actions: [
           IconButton(
-            icon: Icon(Icons.add, size: 28, color: Colors.white),
+            icon: Icon(
+              Icons.add,
+              size: 28,
+              color: theme.appBarTheme.foregroundColor ?? Colors.white,
+            ),
             onPressed: () async {
               final newService = await Navigator.push(
                 context,
@@ -278,8 +298,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         ],
       ),
       body: GridView.builder(
-        padding: EdgeInsets.all(10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        padding: const EdgeInsets.all(10),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
@@ -301,6 +321,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               );
             },
             child: Card(
+              color: theme.scaffoldBackgroundColor == Colors.white
+                  ? Colors.white
+                  : const Color.fromARGB(255, 60, 60, 60),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -310,17 +333,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(
-                      service['icon'],
-                      size: 40,
-                      color: const Color.fromARGB(255, 109, 120, 130),
-                    ),
+                    Icon(service['icon'], size: 40, color: primaryColor),
                     Text(
                       service["title"],
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
                       ),
                     ),
                     Row(
@@ -361,8 +379,15 @@ class ServiceDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: theme.primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -370,27 +395,31 @@ class ServiceDetailPage extends StatelessWidget {
           children: [
             Text(
               "Required Documents:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ...documents.map(
               (doc) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text("• $doc", style: TextStyle(fontSize: 16)),
+                child: Text("• $doc", style: theme.textTheme.bodyLarge),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Steps:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ...steps.asMap().entries.map(
               (entry) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
                   "${entry.key + 1}. ${entry.value}",
-                  style: TextStyle(fontSize: 16),
+                  style: theme.textTheme.bodyLarge,
                 ),
               ),
             ),
@@ -413,8 +442,15 @@ class _AddServicePageState extends State<AddServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Add New Service")),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text("Add New Service"),
+        backgroundColor: theme.primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -433,9 +469,17 @@ class _AddServicePageState extends State<AddServicePage> {
               controller: stepsController,
               decoration: InputDecoration(labelText: "Steps (comma separated)"),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text("Save"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.primaryColor,
+              ),
+              child: Text(
+                "Save",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                ),
+              ),
               onPressed: () {
                 String title = titleController.text;
                 List<String> docs = docsController.text

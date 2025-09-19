@@ -1,11 +1,16 @@
 import 'dart:io';
+import 'package:document_helper_app/widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'full_screenimage.dart';
+import 'login_screen.dart';
+import 'theme_notifier.dart' show ThemeProvider;
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final Function(bool darkMode) onThemeChanged;
+  ProfileScreen({super.key, required this.onThemeChanged});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -15,12 +20,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name = "John";
   String _email = "john@rku.ac.in";
   String _phone = "+91 12345 67890";
+  String _role = "Admin";
   String? _profileImagePath;
+
+  String firstLetter = "";
+  // late final themeProvider;
 
   @override
   void initState() {
     super.initState();
     _loadProfile();
+    firstLetter = _name.isNotEmpty ? _name[0].toUpperCase() : "?";
+    // themeProvider = Provider.of<ThemeProvider>(context);
   }
 
   Future<void> _loadProfile() async {
@@ -38,11 +49,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     prefs.setString('name', _name);
     prefs.setString('email', _email);
     prefs.setString('phone', _phone);
-
     if (_profileImagePath != null) {
       prefs.setString('profileImage', _profileImagePath!);
     } else {
-      prefs.remove('profileImage'); // ✅ remove if no image selected
+      prefs.remove('profileImage');
     }
   }
 
@@ -54,16 +64,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _profileImagePath = image.path;
       });
       _saveProfile();
-
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
+        const SnackBar(
+          content: Text(
             "✨ Wow! You look amazing with your new profile photo! ✨",
             style: TextStyle(fontSize: 16),
           ),
-          backgroundColor: Colors.teal,
+          backgroundColor: const Color.fromARGB(255, 58, 79, 77),
           behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 3),
+          duration: Duration(seconds: 3),
         ),
       );
     }
@@ -103,8 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _name = nameController.text.trim();
                   _email = emailController.text.trim();
                   _phone = phoneController.text.trim();
-
-                  // ✅ If user didn't upload image, reset to first letter avatar
                   if (_profileImagePath == null || _profileImagePath!.isEmpty) {
                     _profileImagePath = null;
                   }
@@ -141,8 +148,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String firstLetter = _name.isNotEmpty ? _name[0].toUpperCase() : "?";
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
@@ -152,21 +157,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
           PopupMenuButton<String>(
             icon: const Icon(Icons.brightness_6, color: Colors.white),
             onSelected: (value) {
+              //  Correct setTheme usage
               if (value == "Light") {
-                print("Light Mode selected");
+                widget.onThemeChanged(false);
+                // themeProvider.setTheme(false);
               } else if (value == "Dark") {
-                print("Dark Mode selected");
+                widget.onThemeChanged(true);
+                // themeProvider.setTheme(true);
               }
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: "Light", child: Text("Light Mode")),
-              const PopupMenuItem(value: "Dark", child: Text("Dark Mode")),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: "Light", child: Text("Light Mode")),
+              PopupMenuItem(value: "Dark", child: Text("Dark Mode")),
             ],
           ),
           IconButton(
             icon: const Icon(Icons.edit),
             color: Colors.white,
             onPressed: _editDetails,
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            color: Colors.white,
+            onPressed: () async {
+              // Clear saved login/session data
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.clear();
+
+              // Navigate to LoginScreen
+              if (context.mounted) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -191,7 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   tag: 'profileImage',
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundColor: Colors.teal,
+                    backgroundColor: const Color.fromARGB(255, 58, 79, 77),
                     child: ClipOval(
                       child: SizedBox(
                         width: 120,
@@ -226,6 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildInfoCard(Icons.person, "Name", _name),
               _buildInfoCard(Icons.email, "Email Address", _email),
               _buildInfoCard(Icons.phone, "Mobile Number", _phone),
+              _buildInfoCard(Icons.security, "Role", _role),
             ],
           ),
         ),

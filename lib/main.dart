@@ -1,3 +1,4 @@
+import 'package:document_helper_app/screens/admin.dart';
 import 'package:document_helper_app/screens/login_screen.dart';
 import 'package:document_helper_app/screens/signup_screen.dart';
 import 'package:document_helper_app/screens/splash_screen.dart';
@@ -46,9 +47,10 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: MainNavigation(
-        onThemeChanged: toggleTheme, // pass function
-      ),
+      // home: MainNavigation(
+      //   onThemeChanged: toggleTheme, // pass function
+      // ),
+      home: AdminPanel(onThemeChanged: toggleTheme),
       // home: LoginScreen(),
       // home: SignUpScreen(),
       // home: SplashScreen(),

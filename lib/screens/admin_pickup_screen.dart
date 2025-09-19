@@ -1,5 +1,5 @@
+import 'package:document_helper_app/screens/admin_pickup_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'admin_pickup_detail_screen.dart';
 
 class AdminPickupScreen extends StatefulWidget {
   const AdminPickupScreen({super.key});
@@ -9,7 +9,6 @@ class AdminPickupScreen extends StatefulWidget {
 }
 
 class _AdminPickupScreenState extends State<AdminPickupScreen> {
-  // List of requests
   List<Map<String, String>> pickupRequests = [
     {
       "name": "Sneha",
@@ -40,11 +39,16 @@ class _AdminPickupScreenState extends State<AdminPickupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("Admin - Pick-Up Details"),
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75),
-        foregroundColor: Colors.white,
+        title: const Text("Admin - Pick-Up Requests"),
+        backgroundColor: primaryColor,
+        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
+        centerTitle: true,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(12),
@@ -53,22 +57,28 @@ class _AdminPickupScreenState extends State<AdminPickupScreen> {
           final request = pickupRequests[index];
 
           return Card(
+            color: theme.scaffoldBackgroundColor == Colors.white
+                ? Colors.white
+                : const Color.fromARGB(255, 60, 60, 60),
             margin: const EdgeInsets.symmetric(vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
             elevation: 3,
             child: ListTile(
-              leading: CircleAvatar(child: Text(request["name"]![0])),
+              leading: CircleAvatar(
+                backgroundColor: primaryColor,
+                foregroundColor: Colors.white,
+                child: Text(request["name"]![0]),
+              ),
               title: Text(
                 request["name"]!,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
+                icon: Icon(Icons.delete, color: theme.colorScheme.error),
                 onPressed: () => deleteRequest(index),
               ),
               onTap: () {
@@ -79,7 +89,7 @@ class _AdminPickupScreenState extends State<AdminPickupScreen> {
                       request: request,
                       onDelete: () {
                         deleteRequest(index);
-                        Navigator.pop(context); // close detail screen
+                        Navigator.pop(context);
                       },
                     ),
                   ),
