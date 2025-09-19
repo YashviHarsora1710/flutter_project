@@ -6,54 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/main_navigation.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final isDarkMode = prefs.getBool("isDarkMode") ?? false;
-
-  runApp(MyApp(isDarkMode: isDarkMode));
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  final bool isDarkMode;
-  const MyApp({super.key, required this.isDarkMode});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late bool _isDarkMode;
-
-  @override
-  void initState() {
-    super.initState();
-    _isDarkMode = widget.isDarkMode;
-  }
-
-  void toggleTheme(bool darkMode) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("isDarkMode", darkMode);
-    setState(() {
-      _isDarkMode = darkMode;
-    });
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Digi Docs Desk',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      // home: MainNavigation(
-      //   onThemeChanged: toggleTheme, // pass function
-      // ),
-      home: AdminPanel(onThemeChanged: toggleTheme),
-      // home: LoginScreen(),
-      // home: SignUpScreen(),
-      // home: SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
