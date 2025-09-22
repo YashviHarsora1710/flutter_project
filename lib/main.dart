@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Document Helper App",
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData.light(), //light theme
+      darkTheme: ThemeData.dark(), //dark theme
       themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light,
       home: AdminPanel(onThemeChanged: toggleTheme), // or your HomeScreen
     );
