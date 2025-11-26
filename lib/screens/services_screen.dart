@@ -1,6 +1,7 @@
-import 'package:document_helper_app/screens/Checklist_page.dart';
-import 'package:document_helper_app/screens/pickup_drop_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'Checklist_page.dart';
+import 'pickup_drop_page.dart';
 import 'pdf_conversion_page.dart';
 
 class ServicesPage extends StatelessWidget {
@@ -29,8 +30,27 @@ class ServicesPage extends StatelessWidget {
     );
   }
 
+  // Convert icon string from Firestore to IconData
+  IconData _getIconFromString(String iconName) {
+    switch (iconName) {
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      case 'taxi':
+        return Icons.local_taxi;
+      case 'checklist':
+        return Icons.checklist;
+      case 'build':
+        return Icons.build;
+      default:
+        return Icons.miscellaneous_services;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final CollectionReference servicesCollection = FirebaseFirestore.instance
+        .collection('admin_services');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Our Services"),
@@ -38,49 +58,64 @@ class ServicesPage extends StatelessWidget {
         backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(10),
-        children: [
-          _buildServiceCard(
-            icon: Icons.picture_as_pdf,
-            title: "PDF Conversion",
-            subtitle: "Convert images into PDF instantly.",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PdfConversionPage(),
-                ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: servicesCollection.snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
+
+          final services = snapshot.data?.docs ?? [];
+
+          if (services.isEmpty) {
+            return const Center(child: Text("No services available"));
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(10),
+            itemCount: services.length,
+            itemBuilder: (context, index) {
+              final service = services[index];
+              final title = service['title'] ?? 'Unnamed Service';
+              final iconName = service['icon'] ?? 'misc';
+              final icon = _getIconFromString(iconName);
+
+              // You can customize navigation based on title
+              VoidCallback onTap = () {};
+              if (title.toLowerCase().contains("pdf")) {
+                onTap = () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PdfConversionPage(),
+                  ),
+                );
+              } else if (title.toLowerCase().contains("pick")) {
+                onTap = () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PickupDropScreen()),
+                );
+              } else if (title.toLowerCase().contains("check")) {
+                onTap = () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChecklistPage(documents: []),
+                  ),
+                );
+              }
+
+              return _buildServiceCard(
+                icon: icon,
+                title: title,
+                subtitle: "Tap to explore this service",
+                onTap: onTap,
               );
             },
-          ),
-          _buildServiceCard(
-            icon: Icons.local_taxi,
-            title: "Pick-up & Drop Facility",
-            subtitle: "Book vehicle pick-up & drop service.",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PickupDropScreen(),
-                ), // 👈 new page
-              );
-            },
-          ),
-          _buildServiceCard(
-            icon: Icons.checklist,
-            title: "Checklist",
-            subtitle: "Create and manage your checklist.",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChecklistPage(documents: []),
-                ), // 👈 open checklist page
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }

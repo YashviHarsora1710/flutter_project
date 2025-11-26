@@ -97,7 +97,7 @@ class _PdfConversionPageState extends State<PdfConversionPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('PDF Conversion'),
-        backgroundColor: const Color.fromARGB(255, 55, 77, 75),
+        backgroundColor: const Color(0xFF4C5C68),
         foregroundColor: Colors.white,
         actions: [
           IconButton(

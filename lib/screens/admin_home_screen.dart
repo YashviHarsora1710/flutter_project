@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -8,201 +9,53 @@ class AdminHomeScreen extends StatefulWidget {
 }
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
-  List<Map<String, dynamic>> services = [
-    {
-      'title': 'Apply for PAN',
-      'icon': Icons.credit_card,
-      'docs': ['Identity Proof', 'Address Proof', 'Photograph'],
-      'steps': [
-        'Fill PAN application form',
-        'Attach documents',
-        'Submit at PAN center',
-        'Receive PAN card',
-      ],
-    },
-    {
-      'title': 'Aadhaar Update',
-      'icon': Icons.perm_identity,
-      'docs': [
-        'Existing Aadhaar Card',
-        'Proof of Address',
-        'Proof of Identity',
-      ],
-      'steps': [
-        'Visit Aadhaar center',
-        'Submit documents',
-        'Biometric verification',
-        'Receive updated Aadhaar',
-      ],
-    },
-    {
-      'title': 'Ration Card',
-      'icon': Icons.receipt_long,
-      'docs': ['Address Proof', 'Income Certificate', 'Family details'],
-      'steps': [
-        'Fill ration card form',
-        'Submit documents to local authority',
-        'Verification process',
-        'Receive ration card',
-      ],
-    },
-    {
-      'title': 'Voter ID',
-      'icon': Icons.how_to_vote,
-      'docs': ['Proof of Age', 'Proof of Address', 'Photograph'],
-      'steps': [
-        'Fill Form 6 online/offline',
-        'Submit required documents',
-        'Verification by Booth Level Officer',
-        'Receive Voter ID',
-      ],
-    },
-    {
-      'title': 'Birth Certificate',
-      'icon': Icons.cake,
-      'docs': ['Hospital Report', 'Parents ID Proof', 'Address Proof'],
-      'steps': [
-        'Collect hospital record',
-        'Fill birth certificate form',
-        'Submit to municipal office',
-        'Receive birth certificate',
-      ],
-    },
-    {
-      'title': 'Pension Scheme',
-      'icon': Icons.account_balance_wallet,
-      'docs': ['ID Proof', 'Bank Passbook', 'Age Proof'],
-      'steps': [
-        'Fill pension scheme application',
-        'Attach documents',
-        'Submit to local authority',
-        'Verification and approval',
-      ],
-    },
-    {
-      'title': 'Driving License',
-      'icon': Icons.directions_car,
-      'docs': ['Age Proof', 'Address Proof', 'Learner License'],
-      'steps': [
-        'Apply online/offline for driving test',
-        'Attach documents',
-        'Appear for driving test',
-        'Receive Driving License',
-      ],
-    },
-    {
-      'title': 'Passport Application',
-      'icon': Icons.flight,
-      'docs': ['Birth Certificate', 'ID Proof', 'Address Proof'],
-      'steps': [
-        'Fill passport application form',
-        'Attach documents',
-        'Book appointment at PSK',
-        'Verification and police check',
-        'Receive passport',
-      ],
-    },
-    {
-      'title': 'Income Certificate',
-      'icon': Icons.money,
-      'docs': ['ID Proof', 'Address Proof', 'Salary/Income proof'],
-      'steps': [
-        'Fill income certificate form',
-        'Attach income proof documents',
-        'Submit at Tehsil office',
-        'Verification and issuance',
-      ],
-    },
-    {
-      'title': 'Caste Certificate',
-      'icon': Icons.assignment_ind,
-      'docs': ['ID Proof', 'Address Proof', 'Community Proof'],
-      'steps': [
-        'Fill caste certificate application',
-        'Attach caste/community proof',
-        'Submit to Tehsil office',
-        'Verification and issuance',
-      ],
-    },
-    {
-      'title': 'Disability Certificate',
-      'icon': Icons.accessible,
-      'docs': ['Medical Report', 'ID Proof', 'Address Proof'],
-      'steps': [
-        'Visit government hospital',
-        'Medical board assessment',
-        'Submit application with documents',
-        'Receive disability certificate',
-      ],
-    },
-    {
-      'title': 'Death Certificate',
-      'icon': Icons.sentiment_very_dissatisfied,
-      'docs': ['Hospital/Doctor Report', 'Family ID Proof', 'Address Proof'],
-      'steps': [
-        'Collect death report from hospital',
-        'Fill death certificate application',
-        'Submit to municipal authority',
-        'Receive death certificate',
-      ],
-    },
-    {
-      'title': 'Marriage Certificate',
-      'icon': Icons.favorite,
-      'docs': [
-        'Wedding Invitation Card',
-        'Bride & Groom ID Proofs',
-        'Witness ID Proofs',
-      ],
-      'steps': [
-        'Fill marriage registration form',
-        'Submit required documents',
-        'Verification of witnesses',
-        'Receive marriage certificate',
-      ],
-    },
-    {
-      'title': 'Land Record Request',
-      'icon': Icons.home_work,
-      'docs': ['Land Ownership Proof', 'ID Proof', 'Tax Receipt'],
-      'steps': [
-        'Fill land record request form',
-        'Submit ownership documents',
-        'Verification by land records office',
-        'Receive land record copy',
-      ],
-    },
-    {
-      'title': 'Non-Criminal Certificate',
-      'icon': Icons.home_work,
-      'docs': [
-        'Identity Proof (Aadhar Card / Passport / Voter ID)',
-        'Address Proof (Utility Bill / Ration Card)',
-        'Passport-size Photographs',
-        'Application Form',
-        'Affidavit (as required by authority)',
-      ],
-      'steps': [
-        'Collect required documents',
-        'Fill the application form for Non-Criminal Certificate',
-        'Get the affidavit prepared and notarized',
-        'Submit documents to the concerned government office (e.g., Taluka / Collector Office)',
-        'Police verification will be conducted',
-        'After approval, collect the Non-Criminal Certificate from the office',
-      ],
-    },
-  ];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void _editService(int index) {
+  IconData getIconFromTitle(String title) {
+    switch (title.toLowerCase()) {
+      case "apply for pan":
+        return Icons.credit_card;
+      case "aadhaar update":
+        return Icons.perm_identity;
+      case "ration card":
+        return Icons.receipt_long;
+      case "voter id":
+        return Icons.how_to_vote;
+      case "birth certificate":
+        return Icons.cake;
+      case "passport application":
+        return Icons.flight;
+      case "pension scheme":
+        return Icons.account_balance_wallet;
+      case "driving license":
+        return Icons.directions_car;
+      case "income certificate":
+        return Icons.money;
+      case "caste certificate":
+        return Icons.assignment_ind;
+      case "disability certificate":
+        return Icons.accessible;
+      case "death certificate":
+        return Icons.sentiment_very_dissatisfied;
+      case "marriage certificate":
+        return Icons.favorite;
+      case "land record request":
+        return Icons.home_work;
+      case "non-criminal certificate":
+        return Icons.home_work;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  void _editService(DocumentSnapshot serviceDoc) {
     final theme = Theme.of(context);
-    final titleController = TextEditingController(
-      text: services[index]['title'],
-    );
+    final titleController = TextEditingController(text: serviceDoc['title']);
     final docsController = TextEditingController(
-      text: services[index]['docs'].join(", "),
+      text: (serviceDoc['docs'] as List).join(", "),
     );
     final stepsController = TextEditingController(
-      text: services[index]['steps'].join(", "),
+      text: (serviceDoc['steps'] as List).join(", "),
     );
 
     showDialog(
@@ -215,17 +68,17 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: "Service Title"),
+                decoration: const InputDecoration(labelText: "Service Title"),
               ),
               TextField(
                 controller: docsController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Documents (comma separated)",
                 ),
               ),
               TextField(
                 controller: stepsController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Steps (comma separated)",
                 ),
               ),
@@ -238,18 +91,23 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             child: Text("Cancel", style: theme.textTheme.bodyLarge),
           ),
           ElevatedButton(
-            onPressed: () {
-              setState(() {
-                services[index]['title'] = titleController.text;
-                services[index]['docs'] = docsController.text
-                    .split(",")
-                    .map((e) => e.trim())
-                    .toList();
-                services[index]['steps'] = stepsController.text
-                    .split(",")
-                    .map((e) => e.trim())
-                    .toList();
-              });
+            onPressed: () async {
+              String newTitle = titleController.text;
+              await _firestore
+                  .collection('services')
+                  .doc(serviceDoc.id)
+                  .update({
+                    "title": newTitle,
+                    "docs": docsController.text
+                        .split(",")
+                        .map((e) => e.trim())
+                        .toList(),
+                    "steps": stepsController.text
+                        .split(",")
+                        .map((e) => e.trim())
+                        .toList(),
+                    "icon": getIconFromTitle(newTitle).codePoint.toString(),
+                  });
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
@@ -265,100 +123,90 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     );
   }
 
+  void _deleteService(String docId) async {
+    await _firestore.collection('services').doc(docId).delete();
+  }
+
+  void _addService() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddServicePage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = theme.primaryColor;
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          "Admin Home",
-          style: TextStyle(
-            color: theme.appBarTheme.foregroundColor ?? Colors.white,
-          ),
-        ),
+        title: const Text("Admin Home"),
+        foregroundColor: Colors.white,
         backgroundColor: primaryColor,
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.add,
-              size: 28,
-              color: theme.appBarTheme.foregroundColor ?? Colors.white,
-            ),
-            onPressed: () async {
-              final newService = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddServicePage()),
-              );
-              if (newService != null) setState(() => services.add(newService));
-            },
-          ),
+          IconButton(icon: const Icon(Icons.add), onPressed: _addService),
         ],
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(10),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: services.length,
-        itemBuilder: (context, index) {
-          var service = services[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ServiceDetailPage(
-                    title: service["title"],
-                    documents: List<String>.from(service["docs"]),
-                    steps: List<String>.from(service["steps"]),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection('services').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return const Center(child: CircularProgressIndicator());
+          final services = snapshot.data!.docs;
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: services.length,
+            itemBuilder: (context, index) {
+              final service = services[index];
+              final iconData = IconData(
+                int.tryParse(service['icon'] ?? '') ??
+                    Icons.insert_drive_file.codePoint,
+                fontFamily: 'MaterialIcons',
+              );
+
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(iconData, size: 40),
+                      Text(
+                        service['title'],
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.green),
+                            onPressed: () => _editService(service),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteService(service.id),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               );
             },
-            child: Card(
-              color: theme.brightness == Brightness.light
-                  ? const Color.fromARGB(255, 243, 240, 240) // Light mode color
-                  : const Color.fromARGB(255, 60, 60, 60), // Dark mode color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(service['icon'], size: 40, color: primaryColor),
-                    Text(
-                      service["title"],
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit, color: Colors.green),
-                          onPressed: () => _editService(index),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () =>
-                              setState(() => services.removeAt(index)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
           );
         },
       ),
@@ -366,90 +214,74 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 }
 
-class ServiceDetailPage extends StatelessWidget {
-  final String title;
-  final List<String> documents;
-  final List<String> steps;
-
-  const ServiceDetailPage({
-    required this.title,
-    required this.documents,
-    required this.steps,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: theme.primaryColor,
-        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Required Documents:",
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            ...documents.map(
-              (doc) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text("• $doc", style: theme.textTheme.bodyLarge),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              "Steps:",
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            ...steps.asMap().entries.map(
-              (entry) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${entry.key + 1}. ${entry.value}",
-                  style: theme.textTheme.bodyLarge,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class AddServicePage extends StatefulWidget {
+  const AddServicePage({super.key});
+
   @override
-  _AddServicePageState createState() => _AddServicePageState();
+  State<AddServicePage> createState() => _AddServicePageState();
 }
 
 class _AddServicePageState extends State<AddServicePage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController docsController = TextEditingController();
   final TextEditingController stepsController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  IconData getIconFromTitle(String title) {
+    switch (title.toLowerCase()) {
+      case "apply for pan":
+        return Icons.credit_card;
+      case "aadhaar update":
+        return Icons.perm_identity;
+      case "ration card":
+        return Icons.receipt_long;
+      case "voter id":
+        return Icons.how_to_vote;
+      case "birth certificate":
+        return Icons.cake;
+      case "passport application":
+        return Icons.flight;
+      case "pension scheme":
+        return Icons.account_balance_wallet;
+      case "driving license":
+        return Icons.directions_car;
+      case "income certificate":
+        return Icons.money;
+      case "caste certificate":
+        return Icons.assignment_ind;
+      case "disability certificate":
+        return Icons.accessible;
+      case "death certificate":
+        return Icons.sentiment_very_dissatisfied;
+      case "marriage certificate":
+        return Icons.favorite;
+      case "land record request":
+        return Icons.home_work;
+      case "non-criminal certificate":
+        return Icons.home_work;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  void _saveService() async {
+    String title = titleController.text;
+    await _firestore.collection('services').add({
+      "title": title,
+      "docs": docsController.text.split(",").map((e) => e.trim()).toList(),
+      "steps": stepsController.text.split(",").map((e) => e.trim()).toList(),
+      "icon": getIconFromTitle(title).codePoint.toString(),
+    });
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text("Add New Service"),
+        title: const Text("Add New Service"),
         backgroundColor: theme.primaryColor,
-        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -457,48 +289,22 @@ class _AddServicePageState extends State<AddServicePage> {
           children: [
             TextField(
               controller: titleController,
-              decoration: InputDecoration(labelText: "Service Title"),
+              decoration: const InputDecoration(labelText: "Service Title"),
             ),
             TextField(
               controller: docsController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Documents (comma separated)",
               ),
             ),
             TextField(
               controller: stepsController,
-              decoration: InputDecoration(labelText: "Steps (comma separated)"),
+              decoration: const InputDecoration(
+                labelText: "Steps (comma separated)",
+              ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.primaryColor,
-              ),
-              child: Text(
-                "Save",
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                String title = titleController.text;
-                List<String> docs = docsController.text
-                    .split(",")
-                    .map((e) => e.trim())
-                    .toList();
-                List<String> steps = stepsController.text
-                    .split(",")
-                    .map((e) => e.trim())
-                    .toList();
-
-                Navigator.pop(context, {
-                  "title": title,
-                  "docs": docs,
-                  "steps": steps,
-                  "icon": Icons.insert_drive_file,
-                });
-              },
-            ),
+            ElevatedButton(onPressed: _saveService, child: const Text("Save")),
           ],
         ),
       ),

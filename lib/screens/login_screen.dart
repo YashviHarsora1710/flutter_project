@@ -1,20 +1,39 @@
+import 'dart:developer';
+import 'package:document_helper_app/auth/auth_service.dart';
 import 'package:document_helper_app/screens/Forgot_Password.dart';
+import 'package:document_helper_app/screens/admin.dart';
 import 'package:document_helper_app/screens/main_navigation.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import 'signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  final Function(bool)? onThemeChanged; // Optional theme toggle
+
+  const LoginScreen({super.key, this.onThemeChanged});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final AuthService _auth = AuthService();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
-    // ✅ Set your admin credentials here
-    const String adminEmail = "admin@gmail.com";
-    const String adminPassword = "admin123";
+    // Admin fixed credentials
+    const String adminEmail = "john@gmail.com";
+    const String adminPassword = "john123";
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -29,7 +48,7 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Email
+            // Email field
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
@@ -40,7 +59,7 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Password
+            // Password field
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -52,24 +71,54 @@ class LoginScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Login button
+            // Login Button
             CustomButton(
               text: "Login",
-              onPressed: () {
+              onPressed: () async {
                 final email = emailController.text.trim();
                 final password = passwordController.text.trim();
 
+                // Admin login
                 if (email == adminEmail && password == adminPassword) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MainNavigation(),
+                      builder: (_) => AdminPanel(
+                        onThemeChanged: widget.onThemeChanged ?? (_) {},
+                      ),
                     ),
                   );
-                } else {
+                  return;
+                }
+
+                // Firebase user login
+                try {
+                  final user = await _auth.loginUserWithEmailAndPassword(
+                    email,
+                    password,
+                  );
+
+                  if (user != null) {
+                    log("✅ User Logged In: ${user.email}");
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MainNavigation(), // User panel
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Invalid email or password!"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  log("❌ Login Error: $e");
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Invalid email or password!"),
+                    SnackBar(
+                      content: Text("Login failed: $e"),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -79,24 +128,23 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            // 🔹 Forgot Password Button
+            // Forgot Password
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const ForgotPassword(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const ForgotPassword()),
                 );
               },
               child: const Text("Forgot Password?"),
             ),
 
+            // Sign Up
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                  MaterialPageRoute(builder: (_) => const SignUpScreen()),
                 );
               },
               child: const Text("Don't have an account? Sign up"),

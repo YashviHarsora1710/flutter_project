@@ -1,104 +1,88 @@
-import 'package:document_helper_app/screens/admin_pickup_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'admin_pickup_detail_screen.dart';
 
-class AdminPickupScreen extends StatefulWidget {
+class AdminPickupScreen extends StatelessWidget {
   const AdminPickupScreen({super.key});
 
   @override
-  State<AdminPickupScreen> createState() => _AdminPickupScreenState();
-}
-
-class _AdminPickupScreenState extends State<AdminPickupScreen> {
-  List<Map<String, String>> pickupRequests = [
-    {
-      "name": "Sneha",
-      "phone": "1234567890",
-      "pickup": "RK University",
-      "drop": "Ahmedabad",
-      "date": "30-09-2025",
-      "time": "6:30 PM",
-    },
-    {
-      "name": "Rahul",
-      "phone": "9876543210",
-      "pickup": "Rajkot",
-      "drop": "Surat",
-      "date": "01-10-2025",
-      "time": "10:00 AM",
-    },
-  ];
-
-  void deleteRequest(int index) {
-    setState(() {
-      pickupRequests.removeAt(index);
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Request deleted successfully")),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _firestore = FirebaseFirestore.instance;
     final theme = Theme.of(context);
-    final primaryColor = theme.primaryColor;
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text("Admin - Pick-Up Requests"),
-        backgroundColor: primaryColor,
-        foregroundColor: theme.appBarTheme.foregroundColor ?? Colors.white,
+        backgroundColor: theme.primaryColor,
+        foregroundColor: Colors.white,
         centerTitle: true,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(12),
-        itemCount: pickupRequests.length,
-        itemBuilder: (context, index) {
-          final request = pickupRequests[index];
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection("pickup_drop").snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-          return Card(
-            color: theme.brightness == Brightness.dark
-                ? Colors.grey[850] // Dark mode card color
-                : Colors.grey[200], // Light mode card color
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 3,
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: primaryColor,
-                foregroundColor: Colors.white,
-                child: Text(request["name"]![0]),
-              ),
-              title: Text(
-                request["name"]!,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black87, // adaptive text
+          final docs = snapshot.data!.docs;
+          if (docs.isEmpty)
+            return const Center(child: Text("No requests found"));
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final data = docs[index].data() as Map<String, dynamic>;
+              final docId = docs[index].id;
+
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: theme.colorScheme.error),
-                onPressed: () => deleteRequest(index),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PickupDetailScreen(
-                      request: request,
-                      onDelete: () {
-                        deleteRequest(index);
-                        Navigator.pop(context);
-                      },
-                    ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: const Color(0xFF4C5C68),
+                    foregroundColor: Colors.white,
+                    child: Text(data["name"][0]),
                   ),
-                );
-              },
-            ),
+                  title: Text(
+                    data["name"],
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      _firestore.collection("pickup_drop").doc(docId).delete();
+                    },
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PickupDetailScreen(
+                          request: {
+                            "name": data["name"],
+                            "phone": data["phone"],
+                            "pickup": data["pickup"],
+                            "drop": data["drop"],
+                            "date": data["date"],
+                            "time": data["time"],
+                          },
+                          onDelete: () {
+                            _firestore
+                                .collection("pickup_drop")
+                                .doc(docId)
+                                .delete();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           );
         },
       ),

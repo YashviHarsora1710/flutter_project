@@ -40,7 +40,11 @@ dependencies:
   provider: ^6.1.5+1
   shared_preferences: ^2.2.3
   fluttertoast: ^8.2.1
-
+  firebase_core: ^4.1.1
+  firebase_auth: ^6.1.0
+  email_otp: ^2.0.2
+  cloud_functions: ^6.0.2
+  cloud_firestore: ^6.0.3
 
   image_picker: ^1.0.4 #  Add this line
   # Document Scanner (Camera access)

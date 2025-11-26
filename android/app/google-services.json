@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "832125493439",
+    "project_id": "digi-docs-desk-23e63",
+    "storage_bucket": "digi-docs-desk-23e63.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832125493439:android:24fc271434eeb54997260a",
+        "android_client_info": {
+          "package_name": "com.example.document_helper_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABS_fO9nQ2Ld4tRXEolqcDsqSBSlRmy3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,8 @@
 import 'dart:convert'; // for base64 encode/decode
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'contact_us_screen.dart';
 import 'login_screen.dart';
 import 'edit_page.dart';
@@ -15,10 +16,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String name = "Sneha";
-  String email = "sneha@gmail.com";
-  String phone = "+91 9876543210";
-  String? profileImageBase64; // ✅ store as Base64 string
+  String name = "";
+  String email = "";
+  String phone = "";
+  String? profileImageBase64;
+
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -26,29 +30,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadProfile();
   }
 
+  // Load profile from Firestore based on logged-in user
   Future<void> _loadProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      name = prefs.getString("name") ?? name;
-      email = prefs.getString("email") ?? email;
-      phone = prefs.getString("phone") ?? phone;
-      profileImageBase64 = prefs.getString(
-        "profileImageBase64",
-      ); // ✅ load image
-    });
+    final user = _auth.currentUser;
+    if (user != null) {
+      final doc = await _firestore
+          .collection("Profile_page")
+          .doc(user.uid)
+          .get();
+      if (doc.exists) {
+        final data = doc.data()!;
+        setState(() {
+          name = data['name'] ?? "";
+          email = data['email'] ?? user.email ?? "";
+          phone = data['phone'] ?? "";
+          profileImageBase64 = data['profileImageBase64'];
+        });
+      } else {
+        setState(() {
+          name = user.displayName ?? "";
+          email = user.email ?? "";
+        });
+      }
+    }
   }
 
-  Future<void> _saveProfile(
-    String newName,
-    String newEmail,
-    String newPhone,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("name", newName);
-    await prefs.setString("email", newEmail);
-    await prefs.setString("phone", newPhone);
-    if (profileImageBase64 != null) {
-      await prefs.setString("profileImageBase64", profileImageBase64!);
+  // Save profile updates to Firestore
+  Future<void> _saveProfile(String newName, String newPhone) async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection("Profile_page").doc(user.uid).set({
+        "name": newName,
+        "email": email,
+        "phone": newPhone,
+        "profileImageBase64": profileImageBase64,
+      }, SetOptions(merge: true));
+
+      setState(() {
+        name = newName;
+        phone = newPhone;
+      });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      final bytes = await picked.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      setState(() {
+        profileImageBase64 = base64Image;
+      });
+
+      final user = _auth.currentUser;
+      if (user != null) {
+        await _firestore.collection("Profile_page").doc(user.uid).set({
+          "profileImageBase64": base64Image,
+        }, SetOptions(merge: true));
+      }
     }
   }
 
@@ -62,36 +103,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (result != null && result is Map<String, String>) {
       final newName = result['name'] ?? name;
-      final newEmail = result['email'] ?? email;
       final newPhone = result['phone'] ?? phone;
 
-      setState(() {
-        name = newName;
-        email = newEmail;
-        phone = newPhone;
-      });
-      await _saveProfile(newName, newEmail, newPhone);
+      await _saveProfile(newName, newPhone);
     }
   }
 
-  // ✅ pick image and store as base64
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      final bytes = await picked.readAsBytes();
-      final base64Image = base64Encode(bytes);
-
-      setState(() {
-        profileImageBase64 = base64Image;
-      });
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString("profileImageBase64", base64Image);
-    }
-  }
-
-  // ✅ open full screen profile picture
   void _openFullImage() {
     if (profileImageBase64 == null) return;
     Navigator.push(
@@ -104,6 +121,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return const Center(child: Text("Please login to view your profile"));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -119,9 +142,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 widget.onThemeChanged(true);
               }
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: "light", child: Text("Light Mode")),
-              const PopupMenuItem(value: "dark", child: Text("Dark Mode")),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: "light", child: Text("Light Mode")),
+              PopupMenuItem(value: "dark", child: Text("Dark Mode")),
             ],
           ),
         ],
@@ -131,11 +154,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // ✅ Profile Circle with image or first letter + Camera Icon
+            // Profile Circle
             Stack(
               children: [
                 GestureDetector(
-                  onTap: _openFullImage, // 👈 tap to open full screen
+                  onTap: _openFullImage,
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: const Color(0xFF4C5C68),
@@ -154,15 +177,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         : null,
                   ),
                 ),
-
-                // ✅ Neatly placed camera icon
                 Positioned(
                   bottom: 0,
                   right: 4,
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white, // white background
+                      color: Colors.white,
                       border: Border.all(color: Colors.grey.shade300, width: 2),
                     ),
                     padding: const EdgeInsets.all(6),
@@ -178,30 +199,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
 
-            // ✅ Show Name
+            const SizedBox(height: 16),
+            // Name
             Text(
               name,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
-            // ✅ Show Email
+            // Email
             Text(
               email,
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 8),
-
-            // ✅ Show Phone
+            // Phone
             Text(
               phone,
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 16),
-
-            // ✅ Edit Profile Button
+            // Edit Profile Button
             ElevatedButton.icon(
               onPressed: _openEdit,
               icon: const Icon(Icons.edit, color: Colors.white),
@@ -217,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 24),
             const Divider(),
 
-            // ✅ Contact Us
+            // Contact Us
             ListTile(
               leading: const Icon(Icons.contact_mail, color: Color(0xFF4C5C68)),
               title: const Text("Contact Us"),
@@ -230,7 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
 
-            // ✅ Logout
+            // Logout
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text("Logout", style: TextStyle(color: Colors.red)),
@@ -273,7 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-// ✅ New Page for Full Screen Profile Picture
+// Full Screen Profile Image
 class ProfileImagePage extends StatelessWidget {
   final String imageBase64;
   const ProfileImagePage({super.key, required this.imageBase64});

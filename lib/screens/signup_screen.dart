@@ -1,3 +1,6 @@
+import 'dart:developer'; // ✅ Fixed invalid import
+
+import 'package:document_helper_app/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import 'login_screen.dart';
@@ -7,9 +10,34 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+    final _auth = AuthService();
+
+    final TextEditingController _name = TextEditingController();
+    final TextEditingController _email = TextEditingController();
+    final TextEditingController _password = TextEditingController();
+
+    // ✅ Define the signup function *inside build()* so it can access controllers & context
+    Future<void> _signup() async {
+      try {
+        final user = await _auth.createUserWithEmailAndPassword(
+          _email.text.trim(),
+          _password.text.trim(),
+        );
+
+        if (user != null) {
+          log("User Created Successfully");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      } catch (e) {
+        log("Error: $e");
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Signup failed: $e")));
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,7 +54,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               TextField(
-                controller: nameController,
+                controller: _name,
                 decoration: const InputDecoration(
                   labelText: 'Full Name',
                   border: OutlineInputBorder(),
@@ -35,7 +63,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: emailController,
+                controller: _email,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
@@ -44,7 +72,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: passwordController,
+                controller: _password,
                 obscureText: true,
                 decoration: const InputDecoration(
                   labelText: 'Password',
@@ -55,13 +83,7 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: 30),
               CustomButton(
                 text: "Sign Up",
-                onPressed: () {
-                  // Placeholder for sign up action
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
+                onPressed: _signup, // ✅ Works now
               ),
               const SizedBox(height: 20),
               TextButton(
@@ -69,7 +91,9 @@ class SignUpScreen extends StatelessWidget {
                   // ✅ Redirect to LoginScreen
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
                   );
                 },
                 child: const Text("Already have an account? Login"),
